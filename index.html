@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cronologia do Amor - Theme Selector (Dark default)</title>
+
+    <!-- React / Babel (development UMD for quick demo) -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Tailwind CDN (for quick demo) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts / Swiper CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&family=Dancing+Script:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+
+    <!-- Tailwind config: adiciona paleta 'love' -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              love: {
+                primary: "#e84393",
+                secondary: "#fd79a8",
+                accent: "#6c5ce7",
+                dark: "#2d3436",
+                light: "#dfe6e9",
+              },
+            },
+            fontFamily: {
+              display: ["Dancing Script", "cursive"],
+              heading: ["Playfair Display", "serif"],
+              body: ["Poppins", "sans-serif"],
+            },
+            animation: {
+              float: "float 6s ease-in-out infinite",
+              "pulse-soft": "pulse-soft 2s ease-in-out infinite",
+              heartbeat: "heartbeat 1.5s ease-in-out infinite",
+            },
+            keyframes: {
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-10px)" },
+              },
+              "pulse-soft": {
+                "0%, 100%": { opacity: 1 },
+                "50%": { opacity: 0.7 },
+              },
+              heartbeat: {
+                "0%": { transform: "scale(1)" },
+                "15%": { transform: "scale(1.1)" },
+                "30%": { transform: "scale(1)" },
+                "45%": { transform: "scale(1.1)" },
+                "60%": { transform: "scale(1)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Partículas / hearts (visuais) */
+      .sparkle {
+        position: fixed;
+        top: -10px;
+        width: 8px;
+        height: 8px;
+        background: radial-gradient(circle, #ffffff, #ffccf9);
+        border-radius: 50%;
+        opacity: 1;
+        animation: driftDown 6s linear forwards;
+        z-index: 100;
+        pointer-events: none;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+      }
+      .heart {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        background: radial-gradient(circle at 30% 30%, #ff4d88, #e91e63);
+        transform: rotate(45deg);
+        bottom: 0;
+        opacity: 0.8;
+        animation: floatHeart 6s linear forwards;
+        z-index: 999;
+        box-shadow: 0 0 10px rgba(255, 64, 129, 0.5);
+        pointer-events: none;
+      }
+      .heart::before,
+      .heart::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 30%, #ff4d88, #e91e63);
+        border-radius: 50%;
+      }
+      .heart::before {
+        top: -50%;
+        left: 0;
+      }
+      .heart::after {
+        left: -50%;
+        top: 0;
+      }
+      @keyframes floatHeart {
+        0% {
+          transform: translateY(0) rotate(45deg);
+          opacity: 0.9;
+        }
+        100% {
+          transform: translateY(-120vh) rotate(45deg);
+          opacity: 0;
+        }
+      }
+      @keyframes driftDown {
+        0% {
+          transform: translateY(0);
+          opacity: 0.9;
+        }
+        100% {
+          transform: translateY(120vh);
+          opacity: 0;
+        }
+      }
+
+      /* Animations small */
+      .fade-in {
+        animation: fadeIn 1.2s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .slide-in {
+        animation: slideIn 0.8s ease-out;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateX(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      .love-card {
+        transition: all 0.35s ease;
+      }
+      .love-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+
+      /* Theme CSS variables (light palettes) */
+      .theme-default {
+        --primary: #e84393;
+        --secondary: #fd79a8;
+        --accent: #6c5ce7;
+        --bg: #f9f9f9;
+        --card-bg: #ffffff;
+        --text: #2d3436;
+      }
+      .theme-valentines {
+        --primary: #e84393;
+        --secondary: #fd79a8;
+        --accent: #ff7675;
+        --bg: #fff0f5;
+        --card-bg: #fffafb;
+        --text: #4a2c2d;
+      }
+      .theme-anniversary {
+        --primary: #fdcb6e;
+        --secondary: #ffeaa7;
+        --accent: #00cec9;
+        --bg: #fef9e7;
+        --card-bg: #fffdf6;
+        --text: #3d3d29;
+      }
+      .theme-christmas {
+        --primary: #d63031;
+        --secondary: #00b894;
+        --accent: #fdcb6e;
+        --bg: #fff9f9;
+        --card-bg: #ffffff;
+        --text: #2d3436;
+      }
+
+      /* New dark theme (DEFAULT) */
+      .theme-dark {
+        --primary: #8b5cf6;
+        --secondary: #ff6b9a;
+        --accent: #00d4ff;
+        --bg: #071022;
+        --card-bg: #0b1220;
+        --text: #e6eef8;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        transition: background-color 0.35s ease, color 0.35s ease;
+      }
+
+      .bg-theme {
+        background-color: var(--bg);
+      }
+      .card-theme {
+        background-color: var(--card-bg);
+      }
+      .text-theme {
+        color: var(--text);
+      }
+      .border-theme {
+        border-color: var(--primary);
+      }
+
+      /* Theme selector minimalist */
+      .theme-selector-wrap {
+        position: fixed;
+        right: 1.25rem;
+        bottom: 1.5rem;
+        z-index: 60;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+      }
+      .theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 9999px;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 6px;
+        box-shadow: 0 8px 18px rgba(2, 6, 23, 0.45);
+      }
+      .palette-swatch {
+        width: 36px;
+        height: 18px;
+        border-radius: 8px;
+        overflow: hidden;
+        display: inline-flex;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+      .swatch-strip {
+        display: flex;
+        width: 100%;
+        height: 100%;
+      }
+      .swatch-seg {
+        flex: 1;
+      }
+
+      .palettes-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
+        margin-bottom: 6px;
+        transition: transform 180ms cubic-bezier(0.2, 0.9, 0.3, 1),
+          opacity 180ms ease;
+      }
+      .palette-line {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        transform-origin: right center;
+      }
+      .palette-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 6px;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .palette-label {
+        font-size: 13px;
+        color: var(--text);
+        opacity: 0.95;
+        margin-right: 6px;
+      }
+
+      .selected-ring {
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.12),
+          0 14px 38px rgba(2, 6, 23, 0.6);
+      }
+
+      /* small screens */
+      @media (max-width: 640px) {
+        .theme-selector-wrap {
+          right: 0.75rem;
+          bottom: 0.9rem;
+        }
+        .palette-label {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="theme-dark min-h-screen flex justify-center items-center p-4 md:p-8"
+  >
+    <div id="root"></div>
+
+    <script type="text/babel">
+      // Theme context
+      const ThemeContext = React.createContext();
+
+      // Small Start Screen
+      function StartScreen({ onStart }) {
+        return (
+          <div className="fixed inset-0 bg-gradient-to-br from-love-primary to-love-accent flex flex-col justify-center items-center z-50 transition-opacity duration-700">
+            <div className="text-center text-white px-4">
+              <h1 className="font-display text-5xl md:text-6xl lg:text-7xl mb-6 animate-pulse">
+                Cronologia do Amor
+              </h1>
+              <p className="font-body text-xl mb-8 max-w-md mx-auto">
+                Cada momento ao seu lado é uma página especial na nossa história
+              </p>
+              <button
+                onClick={onStart}
+                className="bg-white text-love-primary font-heading text-xl px-8 md:px-10 py-3 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+              >
+                💖 Começar Nossa Jornada
+              </button>
+            </div>
+            <div className="absolute bottom-6 text-white font-body text-sm">
+              <p>Nossa história começou em 04/07/2025</p>
+            </div>
+          </div>
+        );
+      }
+
+      // Theme selector (minimal, collapsible)
+      function ThemeSelector() {
+        const { theme, setTheme } = React.useContext(ThemeContext);
+        const [open, setOpen] = React.useState(false);
+        const wrapRef = React.useRef(null);
+
+        const themes = [
+          {
+            id: "theme-dark",
+            name: "Escuro",
+            colors: ["#8b5cf6", "#ff6b9a", "#00d4ff"],
+          },
+          {
+            id: "theme-default",
+            name: "Padrão",
+            colors: ["#e84393", "#fd79a8", "#6c5ce7"],
+          },
+          {
+            id: "theme-valentines",
+            name: "Valentine",
+            colors: ["#e84393", "#fd79a8", "#ff7675"],
+          },
+          {
+            id: "theme-anniversary",
+            name: "Aniversário",
+            colors: ["#fdcb6e", "#ffeaa7", "#00cec9"],
+          },
+          {
+            id: "theme-christmas",
+            name: "Natal",
+            colors: ["#d63031", "#00b894", "#fdcb6e"],
+          },
+        ];
+
+        // close when clicking outside or pressing Esc
+        React.useEffect(() => {
+          function handleDocClick(e) {
+            if (wrapRef.current && !wrapRef.current.contains(e.target)) {
+              setOpen(false);
+            }
+          }
+          function handleKey(e) {
+            if (e.key === "Escape") setOpen(false);
+          }
+          document.addEventListener("mousedown", handleDocClick);
+          document.addEventListener("keydown", handleKey);
+          return () => {
+            document.removeEventListener("mousedown", handleDocClick);
+            document.removeEventListener("keydown", handleKey);
+          };
+        }, []);
+
+        const applyTheme = (id) => {
+          setTheme(id);
+          // Keep layout utility classes on body
+          document.body.className = `${id} min-h-screen flex justify-center items-center p-4 md:p-8`;
+          setOpen(false);
+        };
+
+        const current = themes.find((t) => t.id === theme) || themes[0];
+
+        return (
+          <div ref={wrapRef} className="theme-selector-wrap">
+            {/* panel: expand only when open */}
+            <div
+              className="palettes-panel"
+              style={{
+                opacity: open ? 1 : 0,
+                pointerEvents: open ? "auto" : "none",
+                transform: open ? "translateY(0)" : "translateY(6px)",
+              }}
+            >
+              {themes.map((t) => (
+                <div key={t.id} className="palette-line">
+                  <div className="palette-label hidden md:block">{t.name}</div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      applyTheme(t.id);
+                    }}
+                    className={`palette-btn ${
+                      theme === t.id ? "selected-ring" : ""
+                    }`}
+                    title={t.name}
+                  >
+                    <div className="palette-swatch" aria-hidden>
+                      <div className="swatch-strip">
+                        <div
+                          className="swatch-seg"
+                          style={{ background: t.colors[0] }}
+                        ></div>
+                        <div
+                          className="swatch-seg"
+                          style={{ background: t.colors[1] }}
+                        ></div>
+                        <div
+                          className="swatch-seg"
+                          style={{ background: t.colors[2] }}
+                        ></div>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* main toggle always visible */}
+            <div className="flex items-center justify-end">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen((s) => !s);
+                }}
+                className="theme-toggle"
+                aria-expanded={open}
+                aria-label="Selecionar paleta"
+                title="Selecionar paleta"
+              >
+                <div className="palette-swatch">
+                  <div className="swatch-strip">
+                    {current.colors.map((c, i) => (
+                      <div
+                        key={i}
+                        className="swatch-seg"
+                        style={{ background: c }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      // Header
+      function Header() {
+        return (
+          <div className="w-full max-w-2xl mx-auto text-center mb-8 fade-in">
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-love-primary mb-2 animate-float">
+              Coringa & Taina
+            </h1>
+            <div className="w-24 h-1 bg-gradient-to-r from-love-primary to-love-secondary mx-auto mb-6 rounded-full"></div>
+            <p className="font-heading text-lg md:text-xl text-theme italic max-w-2xl mx-auto">
+              "Não é sobre prometer perfeição… é sobre escolher a mesma pessoa
+              todos os dias."
+            </p>
+          </div>
+        );
+      }
+
+      // Placeholder PhotoCarousel (keeps earlier behavior)
+      function PhotoCarousel() {
+        const imageNames = ["1.jpg", "2.jpg", "3.jpg", "4.jpg"];
+        const GITHUB_BASE =
+          "https://raw.githubusercontent.com/isousax/static-assets/main/projects/our-history/";
+        const swiperRef = React.useRef(null);
+
+        React.useEffect(() => {
+          if (swiperRef.current && window.Swiper) {
+            new Swiper(swiperRef.current, {
+              loop: true,
+              autoplay: { delay: 4000, disableOnInteraction: false },
+              effect: "coverflow",
+              grabCursor: true,
+              centeredSlides: true,
+              slidesPerView: "auto",
+              coverflowEffect: {
+                rotate: 25,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+              },
+              pagination: { el: ".swiper-pagination", clickable: true },
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+            });
+          }
+        }, []);
+
+        return (
+          <div className="w-full max-w-md mx-auto mb-12 rounded-2xl overflow-hidden shadow-xl fade-in">
+            <div className="swiper" ref={swiperRef}>
+              <div className="swiper-wrapper">
+                {imageNames.map((name, i) => (
+                  <div
+                    className="swiper-slide"
+                    key={i}
+                    style={{ width: "300px" }}
+                  >
+                    <div className="aspect-[3/4] rounded-xl overflow-hidden">
+                      <img
+                        src={`${GITHUB_BASE}${name}`}
+                        alt={`Nosso momento ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="swiper-pagination"></div>
+              <div className="swiper-button-prev"></div>
+              <div className="swiper-button-next"></div>
+            </div>
+          </div>
+        );
+      }
+
+      // Time counter (uses luxon)
+      function TimeCounter({ startDate }) {
+        const [timeTogether, setTimeTogether] = React.useState({});
+
+        React.useEffect(() => {
+          const updateCounter = () => {
+            const DateTime = luxon.DateTime;
+            const start = DateTime.fromISO(startDate);
+            const now = DateTime.now();
+            const diff = now
+              .diff(start, [
+                "years",
+                "months",
+                "days",
+                "hours",
+                "minutes",
+                "seconds",
+              ])
+              .toObject();
+
+            setTimeTogether({
+              years: Math.floor(diff.years || 0),
+              months: Math.floor(diff.months || 0),
+              days: Math.floor(diff.days || 0),
+              hours: Math.floor(diff.hours || 0),
+              minutes: Math.floor(diff.minutes || 0),
+              seconds: Math.floor(diff.seconds || 0),
+            });
+          };
+
+          updateCounter();
+          const id = setInterval(updateCounter, 1000);
+          return () => clearInterval(id);
+        }, [startDate]);
+
+        const timeUnits = [
+          { value: timeTogether.years, label: "Anos", color: "bg-red-400" },
+          { value: timeTogether.months, label: "Meses", color: "bg-pink-400" },
+          { value: timeTogether.days, label: "Dias", color: "bg-purple-400" },
+          { value: timeTogether.hours, label: "Horas", color: "bg-blue-400" },
+          {
+            value: timeTogether.minutes,
+            label: "Minutos",
+            color: "bg-green-400",
+          },
+          {
+            value: timeTogether.seconds,
+            label: "Segundos",
+            color: "bg-yellow-400",
+          },
+        ];
+
+        return (
+          <div className="w-full max-w-4xl mx-auto mb-12 fade-in">
+            <h2 className="font-heading text-2xl md:text-3xl text-center mb-8 text-theme">
+              Tempo Juntos
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {timeUnits.map((u, index) => (
+                <div
+                  key={u.label}
+                  className={`rounded-xl p-4 text-white text-center shadow-md transform hover:scale-105 transition-transform duration-300 ${u.color} slide-in`}
+                  style={{ animationDelay: `${index * 0.06}s` }}
+                >
+                  <div className="text-2xl md:text-3xl font-bold">
+                    {u.value || 0}
+                  </div>
+                  <div className="text-sm">{u.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      // Messages
+      function LoveMessages() {
+        const messages = [
+          "Cada dia ao seu lado é um novo capítulo na nossa história de amor.",
+          "Seu sorriso ilumina meus dias e aquece meu coração.",
+          "Amo a forma como você transforma o ordinário em extraordinário.",
+          "Nossa conexão é a prova de que almas gêmeas existem.",
+          "Você é minha melhor escolha, todos os dias.",
+        ];
+        const [idx, setIdx] = React.useState(0);
+        React.useEffect(() => {
+          const id = setInterval(
+            () => setIdx((i) => (i + 1) % messages.length),
+            5000
+          );
+          return () => clearInterval(id);
+        }, []);
+        return (
+          <div className="w-full max-w-2xl mx-auto mb-12 p-6 card-theme rounded-2xl shadow-md love-card">
+            <div className="text-center">
+              <div className="text-love-primary text-4xl mb-4 animate-pulse">
+                💖
+              </div>
+              <p className="font-body italic text-lg text-theme">
+                "{messages[idx]}"
+              </p>
+            </div>
+          </div>
+        );
+      }
+
+      function VideoEmbed() {
+        return (
+          <div className="w-full max-w-2xl mx-auto mb-12 fade-in">
+            {" "}
+            <h2 className="font-heading text-2xl md:text-3xl text-center mb-6 text-theme">
+              Nossa Música
+            </h2>{" "}
+            <div className="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden shadow-xl">
+              {" "}
+              <iframe
+                src="https://www.youtube.com/embed/L0_nXyTMyqM?start=4&rel=0"
+                title="Nossa música especial"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-64 md:h-96"
+              >
+                {" "}
+              </iframe>{" "}
+            </div>{" "}
+          </div>
+        );
+      }
+
+      // Main App
+      function LoveApp() {
+        const [started, setStarted] = React.useState(false);
+        const [theme, setTheme] = React.useState("theme-dark"); // DEFAULT: dark
+        const startDate = "2025-07-04T00:00:00";
+
+        // ensure body class reflects theme on mount and change
+        React.useEffect(() => {
+          document.body.className = `${theme} min-h-screen flex justify-center items-center p-4 md:p-8`;
+        }, [theme]);
+
+        // Particles demo (starts after started)
+        React.useEffect(() => {
+          if (!started) return;
+          let heartsInterval = null;
+          let sparklesInterval = null;
+          const triggerSparkles = () => {
+            sparklesInterval = setInterval(() => {
+              const sparkle = document.createElement("div");
+              sparkle.className = "sparkle";
+              sparkle.style.left = `${Math.random() * 100}vw`;
+              sparkle.style.animationDuration = `${4 + Math.random() * 3}s`;
+              document.body.appendChild(sparkle);
+              setTimeout(() => sparkle.remove(), 9000);
+            }, 350);
+          };
+          const triggerHearts = () => {
+            heartsInterval = setInterval(() => {
+              const heart = document.createElement("div");
+              heart.className = "heart";
+              heart.style.left = `${Math.random() * 100}vw`;
+              heart.style.animationDuration = `${6 + Math.random() * 4}s`;
+              document.body.appendChild(heart);
+              setTimeout(() => heart.remove(), 10000);
+            }, 600);
+          };
+
+          triggerSparkles();
+          // cleanup
+          return () => {
+            if (heartsInterval) clearInterval(heartsInterval);
+            if (sparklesInterval) clearInterval(sparklesInterval);
+          };
+        }, [started]);
+
+        if (!started) return <StartScreen onStart={() => setStarted(true)} />;
+
+        return (
+          <ThemeContext.Provider value={{ theme, setTheme }}>
+            <div className="min-h-screen bg-theme py-12 transition-colors">
+              <ThemeSelector />
+              <div className="container mx-auto px-4">
+                <Header />
+                <PhotoCarousel />
+                <TimeCounter startDate={startDate} />
+                <LoveMessages />
+                <VideoEmbed />
+              </div>
+
+              <footer className="text-center text-theme font-body text-sm mt-12 pb-6">
+                <p>Nosso amor cresce a cada segundo 💕</p>
+              </footer>
+            </div>
+          </ThemeContext.Provider>
+        );
+      }
+
+      // Render
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<LoveApp />);
+    </script>
+
+    <!-- Swiper + Luxon -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+  </body>
+</html>
