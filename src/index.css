@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: #646cff;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* Partículas / hearts (visuais) */
+.sparkle {
+  position: fixed;
+  top: -10px;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #ffffff, #ffccf9);
+  border-radius: 50%;
+  opacity: 1;
+  animation: driftDown 6s linear forwards;
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+}
+.heart {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle at 30% 30%, #ff4d88, #e91e63);
+  transform: rotate(45deg);
+  bottom: 0;
+  opacity: 0.8;
+  animation: floatHeart 6s linear forwards;
+  z-index: 999;
+  box-shadow: 0 0 10px rgba(255, 64, 129, 0.5);
+  pointer-events: none;
+}
+.heart::before,
+.heart::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 30%, #ff4d88, #e91e63);
+  border-radius: 50%;
+}
+.heart::before {
+  top: -50%;
+  left: 0;
+}
+.heart::after {
+  left: -50%;
+  top: 0;
+}
+@keyframes floatHeart {
+  0% {
+    transform: translateY(0) rotate(45deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-120vh) rotate(45deg);
+    opacity: 0;
+  }
+}
+@keyframes driftDown {
+  0% {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(120vh);
+    opacity: 0;
+  }
+}
+
+/* Animations small */
+.fade-in {
+  animation: fadeIn 1.2s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.slide-in {
+  animation: slideIn 0.8s ease-out;
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.love-card {
+  transition: all 0.35s ease;
+}
+.love-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Theme CSS variables (light palettes) */
+.theme-default {
+  --primary: #e84393;
+  --secondary: #fd79a8;
+  --accent: #6c5ce7;
+  --bg: #f9f9f9;
+  --card-bg: #ffffff;
+  --text: #2d3436;
+}
+.theme-valentines {
+  --primary: #e84393;
+  --secondary: #fd79a8;
+  --accent: #ff7675;
+  --bg: #fff0f5;
+  --card-bg: #fffafb;
+  --text: #4a2c2d;
+}
+.theme-anniversary {
+  --primary: #fdcb6e;
+  --secondary: #ffeaa7;
+  --accent: #00cec9;
+  --bg: #fef9e7;
+  --card-bg: #fffdf6;
+  --text: #3d3d29;
+}
+.theme-christmas {
+  --primary: #d63031;
+  --secondary: #00b894;
+  --accent: #fdcb6e;
+  --bg: #fff9f9;
+  --card-bg: #ffffff;
+  --text: #2d3436;
+}
+/* New dark theme (DEFAULT) */
+.theme-dark {
+  --primary: #8b5cf6;
+  --secondary: #ff6b9a;
+  --accent: #00d4ff;
+  --bg: #071022;
+  --card-bg: #0b1220;
+  --text: #e6eef8;
+}
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+.bg-theme {
+  background-color: var(--bg);
+}
+.card-theme {
+  background-color: var(--card-bg);
+}
+.text-theme {
+  color: var(--text);
+}
+.border-theme {
+  border-color: var(--primary);
+}
