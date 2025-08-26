@@ -48,6 +48,8 @@ export default function AudioOnlyPlayer({
       if (created) return;
       created = true;
 
+      console.log("[YT] Criando player com videoId:", extractVideoId(videoId));
+
       playerRef.current = new window.YT.Player("yt-player", {
         videoId: extractVideoId(videoId),
         playerVars: {
@@ -57,13 +59,22 @@ export default function AudioOnlyPlayer({
         host: "https://www.youtube.com",
         events: {
           onReady: (e: any) => {
+            console.log("[YT] Player pronto");
             setPlayerReady(true);
             setDuration(e.target.getDuration());
             setMuted(e.target.isMuted());
             setVolume(e.target.getVolume() / 100);
+
+            // forçar autoplay permitido
+            const iframe =
+              document.querySelector<HTMLIFrameElement>("#yt-player iframe");
+            if (iframe) {
+              iframe.setAttribute("allow", "autoplay; encrypted-media");
+              console.log("[YT] allow aplicado no iframe");
+            }
           },
           onStateChange: (e: any) => {
-            // 1 = playing, 2 = paused
+            console.log("[YT] StateChange:", e.data);
             setPlaying(e.data === 1);
           },
         },
