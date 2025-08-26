@@ -6,7 +6,7 @@ import PhotoCarousel from "./components/PhotoCarousel";
 import TimeCounter from "./components/TimeCounter";
 import LoveMessages from "./components/LoveMessages";
 import AudioOnlyPlayer from "./components/AudioOnlyPlayer";
-import SplashScreen from "./components/ui/SplashScreen";
+//import SplashScreen from "./components/ui/SplashScreen";
 
 function isMonthlyAnniversary(startDateStr: string) {
   const start = new Date(startDateStr);
@@ -111,7 +111,7 @@ function App() {
     };
   }, [started, startDate]);
 
-  //if (loading || !data) return <SplashScreen />;
+  if (loading || !data) console.log("Loading...");
   if (!started)
     return (
       <StartScreen
