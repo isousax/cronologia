@@ -49,7 +49,6 @@ export default function AudioOnlyPlayer({
       playerRef.current = new window.YT.Player("yt-player", {
         videoId: extractVideoId(videoId),
         playerVars: {
-          autoplay: 0,
           start: startAt,
           enablejsapi: 1,
           origin: window.location.origin,
@@ -75,7 +74,7 @@ export default function AudioOnlyPlayer({
       if (iframe) {
         iframe.setAttribute(
           "allow",
-          "autoplay; fullscreen; encrypted-media; accelerometer; clipboard-write; gyroscope; picture-in-picture; web-share"
+          "fullscreen; encrypted-media; accelerometer; clipboard-write; gyroscope; picture-in-picture; web-share"
         );
       }
     }, 500);
