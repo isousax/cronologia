@@ -27,7 +27,11 @@ type Props = {
   title?: string;
 };
 
-export default function AudioOnlyPlayer({ videoId, startAt = 0, title }: Props) {
+export default function AudioOnlyPlayer({
+  videoId,
+  startAt = 0,
+  title,
+}: Props) {
   const playerRef = useRef<YT.Player | null>(null);
   const [playerReady, setPlayerReady] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -64,6 +68,17 @@ export default function AudioOnlyPlayer({ videoId, startAt = 0, title }: Props) 
         },
       });
     }
+
+    setTimeout(() => {
+      const iframe =
+        document.querySelector<HTMLIFrameElement>("#yt-player iframe");
+      if (iframe) {
+        iframe.setAttribute(
+          "allow",
+          "autoplay; fullscreen; encrypted-media; accelerometer; clipboard-write; gyroscope; picture-in-picture; web-share"
+        );
+      }
+    }, 500);
 
     if (!window.YT || !window.YT.Player) {
       const tag = document.createElement("script");
@@ -220,6 +235,6 @@ function extractVideoId(url: string): string | null {
   const regex =
     /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
   const match = url.match(regex);
-  console.log('Video ID:', match ? match[1] : null);
+  console.log("Video ID:", match ? match[1] : null);
   return match ? match[1] : null;
 }
