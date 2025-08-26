@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Permissions-Policy",
-          "value": "autoplay=(self), encrypted-media=(self)"
+          "value": "autoplay=(self \"https://www.youtube.com\"), encrypted-media=(self \"https://www.youtube.com\"), fullscreen=(self \"https://www.youtube.com\")"
         }
       ]
     }
