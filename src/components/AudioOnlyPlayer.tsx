@@ -40,19 +40,21 @@ export default function AudioOnlyPlayer({
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // Helper to create player only once
+  // Criação do player
   useEffect(() => {
     let created = false;
+
     function onYouTubeIframeAPIReady() {
       if (created) return;
       created = true;
+
       playerRef.current = new window.YT.Player("yt-player", {
         videoId: extractVideoId(videoId),
         playerVars: {
           start: startAt,
           enablejsapi: 1,
-          origin: window.location.origin,
         },
+        host: "https://www.youtube.com",
         events: {
           onReady: (e: any) => {
             setPlayerReady(true);
@@ -68,14 +70,6 @@ export default function AudioOnlyPlayer({
       });
     }
 
-    setTimeout(() => {
-      const iframe =
-        document.querySelector<HTMLIFrameElement>("#yt-player iframe");
-      if (iframe) {
-        iframe.setAttribute("allow", "autoplay; encrypted-media");
-      }
-    }, 500);
-
     if (!window.YT || !window.YT.Player) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
@@ -86,7 +80,6 @@ export default function AudioOnlyPlayer({
     }
 
     return () => {
-      // Clean up player if needed
       if (
         playerRef.current &&
         typeof (playerRef.current as any).destroy === "function"
@@ -96,7 +89,7 @@ export default function AudioOnlyPlayer({
     };
   }, [videoId, startAt]);
 
-  // Update current time
+  // Atualiza tempo atual
   useEffect(() => {
     if (!playerReady || !playerRef.current) return;
     const interval = setInterval(() => {
@@ -105,7 +98,7 @@ export default function AudioOnlyPlayer({
     return () => clearInterval(interval);
   }, [playerReady]);
 
-  // Play/pause control
+  // Play/pause
   const handlePlayPause = () => {
     if (!playerReady || !playerRef.current) return;
     if (playing) {
@@ -115,7 +108,7 @@ export default function AudioOnlyPlayer({
     }
   };
 
-  // Seek control
+  // Seek
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     if (playerRef.current) {
@@ -124,7 +117,7 @@ export default function AudioOnlyPlayer({
     }
   };
 
-  // Volume control
+  // Volume
   const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Number(e.target.value);
     setVolume(val);
@@ -134,7 +127,7 @@ export default function AudioOnlyPlayer({
     else playerRef.current?.unMute();
   };
 
-  // Mute/unmute control
+  // Mute/unmute
   const toggleMute = () => {
     if (!playerRef.current) return;
     if (muted) {
