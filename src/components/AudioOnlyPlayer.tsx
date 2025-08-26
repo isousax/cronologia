@@ -72,10 +72,7 @@ export default function AudioOnlyPlayer({
       const iframe =
         document.querySelector<HTMLIFrameElement>("#yt-player iframe");
       if (iframe) {
-        iframe.setAttribute(
-          "allow",
-          "fullscreen; encrypted-media; accelerometer; clipboard-write; gyroscope; picture-in-picture; web-share"
-        );
+        iframe.setAttribute("allow", "autoplay; encrypted-media");
       }
     }, 500);
 
@@ -166,11 +163,11 @@ export default function AudioOnlyPlayer({
       <div
         id="yt-player"
         style={{
-          width: 0,
-          height: 0,
-          opacity: 0,
-          pointerEvents: "none",
+          width: 1,
+          height: 1,
+          left: "-9999px",
           position: "absolute",
+          top: "auto",
         }}
       ></div>
 
