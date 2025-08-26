@@ -112,6 +112,16 @@ function App() {
   }, [started, startDate]);
 
   if (loading || !data) return <SplashScreen />;
+  if (!started)
+    return (
+      <StartScreen
+        onStart={() => setStarted(true)}
+        title={data?.customText?.title}
+        buttonText={data?.customText?.button}
+        intro={data?.customText?.intro}
+        startDate={data?.basic?.data_inicio}
+      />
+    );
 
   return (
     <ThemeProvider>
