@@ -163,11 +163,13 @@ export default function AudioOnlyPlayer({
       <div
         id="yt-player"
         style={{
-          width: 1,
-          height: 1,
-          left: "-9999px",
+          width: "1px",
+          height: "1px",
           position: "absolute",
-          top: "auto",
+          top: 0,
+          left: 0,
+          opacity: 0.01,
+          pointerEvents: "none",
         }}
       ></div>
 

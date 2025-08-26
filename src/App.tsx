@@ -111,7 +111,7 @@ function App() {
     };
   }, [started, startDate]);
 
-  if (loading || !data) return <SplashScreen />;
+  //if (loading || !data) return <SplashScreen />;
   if (!started)
     return (
       <StartScreen
