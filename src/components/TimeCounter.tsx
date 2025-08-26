@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { DateTime } from "luxon";
 
-type Props = { startDate: string };
+type Props = { startDate?: string };
 
 export default function TimeCounter({ startDate }: Props) {
-  const [timeTogether, setTimeTogether] = useState<any>({});
+  const [timeTogether, setTimeTogether] = useState<Record<string, number>>({});
 
   useEffect(() => {
     const updateCounter = () => {
-      const start = DateTime.fromISO(startDate);
+      const start = DateTime.fromISO(startDate || new Date().toISOString());
       const now = DateTime.now();
       const diff = now
         .diff(start, [
