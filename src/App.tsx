@@ -142,7 +142,7 @@ function App() {
           />
         </div>
         <footer className="text-center text-theme font-body text-sm mt-12 pb-6">
-          <p>
+          <p className="mb-10">
             {data?.customText?.phrase_final ||
               "Nosso amor cresce a cada segundo 💕"}
           </p>
