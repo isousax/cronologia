@@ -8,17 +8,12 @@ export default function TimeCounter({ startDate }: Props) {
 
   useEffect(() => {
     const updateCounter = () => {
-      const start = DateTime.fromISO(startDate || new Date().toISOString());
+      const start = startDate
+        ? DateTime.fromFormat(startDate, "yyyy-MM-dd")
+        : DateTime.now();
       const now = DateTime.now();
       const diff = now
-        .diff(start, [
-          "years",
-          "months",
-          "days",
-          "hours",
-          "minutes",
-          "seconds",
-        ])
+        .diff(start, ["years", "months", "days", "hours", "minutes", "seconds"])
         .toObject();
 
       setTimeTogether({
