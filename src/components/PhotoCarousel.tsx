@@ -22,6 +22,7 @@ type Props = {
   }>;
 };
 
+
 export default function PhotoCarousel({ photos }: Props) {
   const hasPhotos = Array.isArray(photos) && photos.length > 0;
 
@@ -53,7 +54,12 @@ export default function PhotoCarousel({ photos }: Props) {
           slideShadows: true,
         }}
         navigation
-        pagination={{ clickable: true }}
+        pagination={{ 
+          clickable: true,
+          // Ajustamos a posição da paginação para não sobrepor os títulos
+          dynamicBullets: true,
+          dynamicMainBullets: 3
+        }}
         autoplay={{ delay: 4000, disableOnInteraction: false }}
         loop={photos.length > 2}
         grabCursor={true}
@@ -64,12 +70,19 @@ export default function PhotoCarousel({ photos }: Props) {
       >
         {photos.map((photo, i) => (
           <SwiperSlide key={i} style={{ width: "min(300px, 90vw)" }}>
-            <div className="aspect-[3/4] rounded-xl overflow-hidden">
+            <div className="aspect-[3/4] rounded-xl overflow-hidden relative group">
               <img
                 src={photo.preview}
                 alt={`Nosso momento ${i + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
+              
+              {/* Overlay com título */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 pt-8">
+                <h3 className="text-white text-sm font-medium text-center drop-shadow-md">
+                  {photo.title}
+                </h3>
+              </div>
             </div>
           </SwiperSlide>
         ))}
