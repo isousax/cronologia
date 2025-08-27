@@ -48,8 +48,6 @@ export default function AudioOnlyPlayer({
       if (created) return;
       created = true;
 
-      console.log("[YT] Criando player com videoId:", extractVideoId(videoId));
-
       playerRef.current = new window.YT.Player("yt-player", {
         videoId: extractVideoId(videoId),
         playerVars: {
@@ -59,7 +57,6 @@ export default function AudioOnlyPlayer({
         host: "https://www.youtube.com",
         events: {
           onReady: (e: any) => {
-            console.log("[YT] Player pronto");
             setPlayerReady(true);
             setDuration(e.target.getDuration());
             setMuted(e.target.isMuted());
@@ -70,11 +67,9 @@ export default function AudioOnlyPlayer({
               document.querySelector<HTMLIFrameElement>("#yt-player iframe");
             if (iframe) {
               iframe.setAttribute("allow", "autoplay; encrypted-media");
-              console.log("[YT] allow aplicado no iframe");
             }
           },
           onStateChange: (e: any) => {
-            console.log("[YT] StateChange:", e.data);
             setPlaying(e.data === 1);
           },
         },
@@ -237,6 +232,5 @@ function extractVideoId(url: string): string | null {
   const regex =
     /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
   const match = url.match(regex);
-  console.log("Video ID:", match ? match[1] : null);
   return match ? match[1] : null;
 }
