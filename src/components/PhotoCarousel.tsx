@@ -58,17 +58,9 @@ export default function PhotoCarousel({ photos }: Props) {
         loop={photos.length > 2}
         grabCursor={true}
         centeredSlides={true}
-        slidesPerView={1}
-        breakpoints={{
-          640: {
-            slidesPerView: "auto",
-          },
-          1024: {
-            slidesPerView: "auto",
-          },
-        }}
+        slidesPerView="auto"
         className="mySwiper"
-        style={{ maxWidth: "100%" }}
+        style={{ maxWidth: "100vw" }}
       >
         {photos.map((photo, i) => (
           <SwiperSlide key={i} style={{ width: "min(300px, 90vw)" }}>
