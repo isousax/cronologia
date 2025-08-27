@@ -13,10 +13,13 @@ export default function StartScreen({
   intro,
   startDate,
 }: Props) {
-  
-  const formattedDate = startDate
-    ? new Date(startDate).toLocaleDateString()
-    : "-";
+  function formatDate(dateStr?: string) {
+    if (!dateStr) return "-";
+    const [year, month, day] = dateStr.split("-");
+    return `${day}/${month}/${year}`;
+  }
+
+  const formattedDate = formatDate(startDate);
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-love-primary/90 via-love-accent/80 to-love-secondary/90 flex flex-col justify-center items-center z-50 overflow-hidden">
@@ -58,10 +61,7 @@ export default function StartScreen({
 
       <div className="absolute bottom-8 text-white font-body text-sm backdrop-blur-sm bg-black/20 rounded-full py-2 px-4">
         <p className="opacity-90">
-          Tudo começou em{" "}
-          <span className="font-semibold">
-            {formattedDate}
-          </span>
+          Tudo começou em <span className="font-semibold">{formattedDate}</span>
         </p>
       </div>
     </div>
