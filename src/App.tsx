@@ -147,7 +147,7 @@ function App() {
         videoId={
           data?.music?.url || "https://www.youtube.com/watch?v=ICS6uKC93w0"
         }
-        startAt={data?.music?.url ? 1 : 13}
+        startAt={data?.music?.url ? 13 : 13}
         title={data?.music?.title || "Jorge & Mateus - Os Anjos Cantam"}
       />
     </ThemeProvider>
