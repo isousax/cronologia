@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
@@ -156,7 +157,7 @@ export default function AudioOnlyPlayer({
     return `${m}:${s}`;
   };
 
-  return (
+  const controls = (
     <>
       {/* iframe invisível */}
       <div
@@ -229,6 +230,8 @@ export default function AudioOnlyPlayer({
       </div>
     </>
   );
+
+  return createPortal(controls, document.body);
 }
 
 function extractVideoId(url: string): string | null {
