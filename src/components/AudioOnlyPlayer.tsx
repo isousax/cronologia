@@ -179,7 +179,7 @@ export default function AudioOnlyPlayer({
         style={{ minHeight: "10dvh" }}
       >
         <button
-          className="p-2 rounded-full bg-love-primary text-white hover:bg-love-secondary transition shrink-0"
+          className="p-2 rounded-full bg-love-primary text-white hover:bg-love-secondary transition shrink-0 border-none focus:outline-none"
           onClick={handlePlayPause}
           disabled={!playerReady}
         >
@@ -206,7 +206,7 @@ export default function AudioOnlyPlayer({
         </div>
 
         <button
-          className="p-2 rounded-full bg-theme text-love-primary hover:bg-love-primary hover:text-white transition shrink-0"
+          className="p-2 rounded-full bg-theme text-love-primary hover:bg-love-primary hover:text-white transition shrink-0 border-none focus:outline-none"
           onClick={toggleMute}
           disabled={!playerReady}
         >
