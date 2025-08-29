@@ -139,15 +139,17 @@ function App() {
                 "Nosso amor cresce a cada segundo 💕"}
             </p>
           </div>
-          <AudioOnlyPlayer
-            videoId={
-              data?.music?.url || "https://www.youtube.com/watch?v=ICS6uKC93w0"
-            }
-            startAt={data?.music?.url ? 1 : 13}
-            title={data?.music?.title || "Jorge & Mateus - Os Anjos Cantam"}
-          />
         </div>
       </div>
+
+      {/* Player fixo, fora do fluxo */}
+      <AudioOnlyPlayer
+        videoId={
+          data?.music?.url || "https://www.youtube.com/watch?v=ICS6uKC93w0"
+        }
+        startAt={data?.music?.url ? 1 : 13}
+        title={data?.music?.title || "Jorge & Mateus - Os Anjos Cantam"}
+      />
     </ThemeProvider>
   );
 }
