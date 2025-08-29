@@ -110,7 +110,7 @@ function App() {
     };
   }, [started, startDate]);
 
-  if (loading || !data) return <SplashScreen />;
+  //if (loading || !data) return <SplashScreen />;
   if (!started)
     return (
       <StartScreen
@@ -124,7 +124,10 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-theme py-12 transition-colors">
+      <div
+        className="min-h-screen bg-theme py-4 sm:p-6 transition-colors"
+        style={{ paddingBottom: "var(--app-safe-bottom)" }}
+      >
         <div className="container mx-auto">
           <Header
             name_couple={data?.basic?.name_couple}
@@ -141,8 +144,9 @@ function App() {
             title={data?.music?.title || "Jorge & Mateus - Os Anjos Cantam"}
           />
         </div>
+
         <footer className="text-center text-theme font-body text-sm mt-12 pb-6">
-          <p className="mb-10">
+          <p className="mb-1">
             {data?.customText?.phrase_final ||
               "Nosso amor cresce a cada segundo 💕"}
           </p>

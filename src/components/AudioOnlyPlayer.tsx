@@ -173,7 +173,10 @@ export default function AudioOnlyPlayer({
       ></div>
 
       {/* controles personalizados */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-theme shadow-lg px-3 py-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3 w-full max-w-full">
+      <div
+        className="fixed bottom-0 left-0 right-0 z-50 bg-theme shadow-lg px-3 py-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3 w-full"
+        style={{ minHeight: "10dvh" }}
+      >
         <button
           className="p-2 rounded-full bg-love-primary text-white hover:bg-love-secondary transition shrink-0"
           onClick={handlePlayPause}
