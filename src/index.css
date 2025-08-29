@@ -2,11 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-#root, body, html {  
-  height: 100dvh;
+html, body, #root {
+  height: 100%;
   margin: 0;
   padding: 0;
   min-height: 100%;
+}
+
+.app-full-height {
+  min-height: calc(var(--vh, 1vh) * 100);
 }
 
 a {
@@ -20,8 +24,17 @@ a:hover {
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.center-screen {
+  min-height: calc(var(--vh, 1vh) * 100);
   display: flex;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
