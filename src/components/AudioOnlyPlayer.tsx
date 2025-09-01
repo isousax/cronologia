@@ -175,8 +175,13 @@ export default function AudioOnlyPlayer({
 
       {/* controles personalizados */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-50 bg-theme shadow-lg px-3 py-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3 w-full"
-        style={{ minHeight: "10dvh" }}
+        className="fixed left-0 right-0 z-50 bg-theme shadow-lg px-3 py-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3 w-full"
+        style={{
+          minHeight: '10dvh',
+          height: 'auto',
+          bottom: 'env(safe-area-inset-bottom, 0)',
+          // Garante que o player fique sempre visível na viewport dinâmica
+        }}
       >
         <button
           className="p-2 rounded-full bg-love-primary text-white hover:bg-love-secondary transition shrink-0 border-none focus:outline-none"
